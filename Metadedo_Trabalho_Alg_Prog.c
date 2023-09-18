@@ -3,7 +3,7 @@
 #include <time.h>
 #include <string.h>
 
-#define tamanho 50000
+#define tamanho 40000
 void preencher(long V[],int n){
     srand(time(NULL));
     int i;
@@ -22,14 +22,9 @@ void escreva(long l[],int n){
 /*
 ORDENAÇÃO POR DIVIDIR E CONQUISTAR
 */
-void mergesort(long v[],int ini,int fim){
-    int meio,i,j,k;
-    long vaux[tamanho];
-    if(ini < fim){
-        meio = (ini+fim)/2;
-        mergesort(v,ini,meio);
-        mergesort(v,meio+1,fim);
-        //intercalar
+void merge(long v[],int ini, int meio, int fim){
+    long vaux[fim];
+    int i,j,k;
         i = ini;
         j = meio+1;
         k = ini;
@@ -57,7 +52,17 @@ void mergesort(long v[],int ini,int fim){
             v[k] = vaux[k];
         }
     }
+void mergesort(long v[],int ini,int fim){
+    int meio;
+    if(ini < fim){
+        meio = (ini+fim)/2;
+        mergesort(v,ini,meio);
+        mergesort(v,meio+1,fim);
+        merge(v,ini,meio,fim);
+    }
+    
 }
+        
 /*
 ORDENAÇÃO POR iNSERÇÃO
 
@@ -86,66 +91,48 @@ ORDENAÇÃO POR SELEÇÃO
 
 
 */
-void selection(int n,long v[]){
-  int i;
-  int min = 0;
-  if(n == 1)
-  return;
-  for(i = 1;i < n;i++){
-    if(v[min] > v[i]){
-      troca(&v[min], &v[i]);
-      min = i;
-      }
+void selection(int n, long v[], int j) {
+    int i;
+    int min =j; 
+    if (j >= n - 1)
+        return;
+    for (i = j + 1; i < n; i++) {
+        if (v[min] > v[i]) {
+            min = i; 
+        }
     }
-    selection(n-1,v);
-    
+    troca(&v[min], &v[j]); 
+    selection(n, v, j + 1); 
 }
 int main(){
     clock_t ini, fim;
     double tempo;
     long V[tamanho];
-    char entrada[10];
-    printf("Digite Qual:\n");
-    scanf("%s",&entrada);
-/*
-ORDENAÇÃO POR DIVIDIR E CONSQUISTAR
-*/
-    if(strcmp(entrada,"Merge") == 0){
-        preencher(V,tamanho);
-        // marca o começo antes de entrar na função ini = clock();
-        ini = clock();
-        mergesort(V,0,tamanho-1);
-        // marca o fim depois de sair na função
-        fim = clock();
-        tempo =(double)(fim-ini)/CLOCKS_PER_SEC;
-        printf("Tempo por Merge foi %f:\n",tempo);
-    } 
-/*
-ORDENAÇÃO POR iNSERÇÃO
-*/
-   else if(strcmp(entrada,"Insert") == 0){
-        preencher(V,tamanho);
-        // marca o começo antes de entrar na função ini = clock();
-        ini = clock();
-        insert(tamanho,V);
-        // marca o fim depois de sair na função
-        fim = clock();
-        tempo =(double)(fim-ini)/CLOCKS_PER_SEC;
-        printf("Tempo  por Insertion foi %f:\n",tempo);
-    }
-/*
-ORDENAÇÃO POR SELEÇAÕ
-*/
-    else if(strcmp(entrada,"Selection") == 0){
-        preencher(V,tamanho);
-        // marca o começo antes de entrar na função ini = clock();
-        ini = clock();
-        selection(tamanho,V);
-        // marca o fim depois de sair na função
-        fim = clock();
-        tempo =(double)(fim-ini)/CLOCKS_PER_SEC;
-        printf("Tempo  por Selection foi %f:\n",tempo);
-    }
+    //section
+    preencher(V,tamanho);
+    ini = clock();
+    selection(tamanho,V,0);
+    fim = clock();
+    tempo = (double)(fim-ini) * 1000 / CLOCKS_PER_SEC;
+        printf("o tempo de selection foi:%lf\n",tempo);
 
- return 0;
-};
+    //insert
+    preencher(V,tamanho);
+
+    ini = clock();
+    insert(tamanho,V);
+    fim = clock();
+
+    tempo = (double)(fim-ini) * 1000 / CLOCKS_PER_SEC;
+    printf("o tempo de insert foi:%lf\n",tempo);
+    //merge
+    preencher(V,tamanho);
+
+    ini = clock();
+    mergesort(V,0,tamanho-1);
+    fim = clock();
+  
+    tempo = (double)(fim-ini) * 1000/ CLOCKS_PER_SEC;
+    printf("o tempo de merge foi:%lf\n",tempo);
+    return 0;
+}
