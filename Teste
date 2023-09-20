@@ -4,7 +4,12 @@
 #include <string.h>
 
 
-
+void preencherV(int V[],int v[], int n) {
+    srand(time(NULL));
+    int i;
+    for (i = 0; i < n; i++)
+        v[i] = V[i] ;
+}
 void preencher(int V[], int n) {
     srand(time(NULL));
     int i;
@@ -14,6 +19,7 @@ void preencher(int V[], int n) {
 
 void escreva(int l[], int n) {
     int i;
+    
     for (i = 0; i < n; i++) {
         printf("%d ", l[i]);
     }
@@ -134,65 +140,140 @@ int main() {
     scanf("%d", &tamanho);
 
     int V[tamanho];
+    int Vaux[tamanho];
     printf(" Quer imprimir a saída ordenada(1) ou apenas o tempo de processamento de cada algoritmo(2)?\n");
     scanf("%d", &opcao);
     preencher(V,tamanho);
 
     if (opcao == 1) {
-        printf("ATENCAO!! \n O Programa ira printar o vetor conforme voce digita:(1º)merge,(2º)click,(3º)insert e (4º)selection:\n");
+        printf("ATENCAO!! \n O Programa ira printar o vetor conforme voce digita na sequencia:(1)merge,(2)click,(3)insert e (4)selection:\n");
+    	
+    	
+    	/*MERGE SORT*/
+    	printf("MERGE SORT\n");
         printf("Digite 1:");
         scanf("%d", &opcao);
-        mergesort(V, 0, tamanho - 1);
-        escreva(V,tamanho);
+        //o vetor Aux Pegou o Vetor original De novo para Fazer a ORDENAÇAO com os mesmo elementos
+    	preencherV(V,Vaux,tamanho);
+        mergesort(Vaux, 0, tamanho - 1);
+        printf("Vetor Original:");
+	    escreva(V,tamanho);
+        printf("Vetor ordenado:");
+        escreva(Vaux,tamanho);
+	    // os 2 "printf("\n");" é para dar um espaço, dai vemos o codigo melhor
+	    printf("\n");
+	    printf("\n");
+	    
+	    
+	    /*QUICK SORT*/
+	    printf("QUICK SORT\n");
         printf("Digite 2:");
         scanf("%d", &opcao);
-        quick_sort(V, 0, tamanho - 1);
-        escreva(V,tamanho);
+        //o vetor Aux Pegou o Vetor original De novo para Fazer a ORDENAÇAO com os mesmo elementos
+	    preencherV(V,Vaux,tamanho);
+        quick_sort(Vaux, 0, tamanho - 1);
+        printf("Vetor Original:");
+	    escreva(V,tamanho);
+        printf("Vetor ordenado:");
+        escreva(Vaux,tamanho);
+    	// os 2 "printf("\n");" é para dar um espaço, dai vemos o codigo melhor
+	    printf("\n");
+	    printf("\n");
+	    
+	    
+	    /*INSERT SORT*/
+	    printf("INSERT SORT\n");
         printf("Digite 3:");
-        insert(tamanho,V);
-        escreva(V,tamanho);
         scanf("%d", &opcao);
+        //o vetor Aux Pegou o Vetor original De novo para Fazer a ORDENAÇAO com os mesmo elementos
+	    preencherV(V,Vaux,tamanho);
+        insert(tamanho,Vaux);
+        printf("Vetor Original:");
+	    escreva(V,tamanho);
+        printf("Vetor ordenado:");
+        escreva(Vaux,tamanho);
+	    // os 2 "printf("\n");" é para dar um espaço, dai vemos o codigo melhor
+	    printf("\n");
+	    printf("\n");
+	    
+	    
+	    /*SELECTION SORT*/
+	    printf("SELECTION SORT\n");
         printf("Digite 4:");
         scanf("%d", &opcao);
-        selection(tamanho, V, 0);
-        escreva(V,tamanho);
+        //o vetor Aux Pegou o Vetor original De novo para Fazer a ORDENAÇAO com os mesmo elementos
+        //Preenche o Vetor Aux com o vetor original para usar o mesmo sempre e calcular o tempo correto do mesmo vetor
+	    preencherV(V,Vaux,tamanho);
+        selection(tamanho, Vaux, 0);
+        printf("Vetor Original:");
+	    escreva(V,tamanho);
+        printf("Vetor ordenado:");
+        escreva(Vaux,tamanho);
+        
+        printf("\n");
+        printf("\n");
+        printf("Codigo Executado Com Sucesso!!");
+        
     }else{
-            printf("O Programa ira printar o tempo, digite na ordem 1 depois 2 depois 3 depois 4:(1)merge,(2)click,(3)insert e (4)selection:\n");
-            printf("Digite:");
-            scanf("%d", &opcao);
-            preencher(V,tamanho);
+        printf("O Programa ira printar o tempo, digite na ordem 1 depois 2 depois 3 depois 4:(1)merge,(2)click,(3)insert e (4)selection:\n");
+           
+        /*MERGE SORT*/
+        printf("MERGE SORT\n");
+        printf("Digite 1:");
+        scanf("%d", &opcao);
+        //preenchendo o Vetor aux Com o Vetor original
+        preencherV(V,Vaux,tamanho);
+        ini = clock();
+        mergesort(Vaux, 0, tamanho - 1);
+        fim = clock();
+        //calcula o tempo do Merge
+        tempomerge = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+        printf("O tempo de merge sort foi: %lf ms\n", tempomerge);
             
             
-            ini = clock();
-            mergesort(V, 0, tamanho - 1);
-            fim = clock();
-            tempomerge = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
-            printf("O tempo de merge sort foi: %lf ms\n", tempomerge);
-            printf("Digite:");
-            scanf("%d", &opcao);
-            preencher(V,tamanho);
-            ini = clock();
-            quick_sort(V, 0, tamanho - 1);
-            fim = clock();
-            tempoclick = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
-            printf("O tempo do quick foi: %lf ms\n", tempoclick);
-            printf("Digite:");
-            scanf("%d", &opcao);
-            preencher(V,tamanho);
-            ini = clock();
-            insert(tamanho, V);
-            fim = clock();
-            tempoinsert = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
-            printf("O tempo de insert foi: %lf ms\n", tempoinsert);
-            printf("Digite:");
-            scanf("%d", &opcao);
-            preencher(V,tamanho);
-            ini = clock();
-            selection(tamanho, V, 0);
-            fim = clock();
-            temposelection = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
-            printf("O tempo de selection foi: %lf ms\n", temposelection);
-            printf("Codigo Executado Com Sucesso!!")
+        /*QUICK SORT*/
+        printf("QUICK SORT\n");
+        printf("Digite 2:");
+        scanf("%d", &opcao);
+        //Preenche o Vetor Aux com o vetor original para usar o mesmo sempre e calcular o tempo correto do mesmo vetor
+        preencherV(V,Vaux,tamanho);
+        ini = clock();
+        quick_sort(Vaux, 0, tamanho - 1);
+        fim = clock();
+        //calcula o tempo do Quick
+        tempoclick = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+        printf("O tempo do quick foi: %lf ms\n", tempoclick);
+        
+        
+        /*INSERT SORT*/
+        printf("INSERT SORT\n");
+        printf("Digite 3:");
+        scanf("%d", &opcao);
+        //Preenche o Vetor Aux com o vetor original para usar o mesmo sempre e calcular o tempo correto do mesmo vetor
+        preencherV(V,Vaux,tamanho);
+        ini = clock();
+        insert(tamanho, Vaux);
+        fim = clock();
+        //calcula o tempo do insert
+        tempoinsert = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+        printf("O tempo de insert foi: %lf ms\n", tempoinsert);
+        
+            
+        /*SELECTION SORT*/
+        printf("SELECTION SORT\n");
+        printf("Digite 4:");
+        scanf("%d", &opcao);
+        //Preenche o Vetor Aux com o vetor original para usar o mesmo sempre e calcular o tempo correto do mesmo vetor
+        preencherV(V,Vaux,tamanho);
+        ini = clock();
+        selection(tamanho, V, 0);
+        fim = clock();
+        //calcula o tempo do selection
+        temposelection = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+        printf("O tempo de selection foi: %lf ms\n", temposelection);
+        printf("\n");
+        printf("\n");
+        printf("Codigo Executado Com Sucesso!!");
 
     }
 
