@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <time.h>
+
+int BuscaBI(int V[],int TamanhoI, int TamanhoF,int N){
+     if (TamanhoI <= TamanhoF)
+     {
+        int meio = TamanhoI + (TamanhoF - TamanhoI) / 2;
+
+        if( N == V[meio] ){
+            return meio;
+            
+        }
+        else if ( N > V[meio]){
+           return BuscaBI(V,meio+1,TamanhoF,N);
+        }
+        else if ( N < V[meio]){
+            return BuscaBI(V,TamanhoI,meio-1,N);
+        }
+     }
+     return -1;
+}
+int main(void){
+    clock_t ini,fim;
+    int acho;
+    double tempo; 
+    int v[5] = {22,44,45,56,57};
+    int t = 5;
+    int n = 56;
+    ini = clock();
+    acho = BuscaBI(v,0,t-1,n);
+    fim = clock();
+    tempo = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+    printf("o Tempo de execuçaõ foi :%lf\n",tempo);
+    if(acho == -1){
+        printf("Elemento nao encontrado");
+    }
+    else{
+        printf("ELemento encontrado na posicao:%d", acho);
+    }
+
+  
+  
+  
+  return 0;
+  
+}
