@@ -247,7 +247,8 @@ int main() {
         scanf("%d",&opcaoT);
         if(opcaoT == 1){
             printf("Digite o novo tamanho:");
-            scanf("%d", &entrada);
+            scanf("%d", &tamanho);
+            preencher(V,tamanho);
         }
         
         printf("Digite o Metodo a ser usado de novo:");
