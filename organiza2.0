@@ -168,7 +168,7 @@ int main() {
             mergesort(Vaux, 0, tamanho - 1);
             fim = clock();
             //calcula o tempo do Merge
-            tempomerge = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+            tempomerge = (double)(fim - ini)  / CLOCKS_PER_SEC;
             printf("O tempo de merge sort foi: %lf ms\n", tempomerge);
             }
         }
@@ -191,7 +191,7 @@ int main() {
                 quick_sort(Vaux, 0, tamanho - 1);
                 fim = clock();
                 //calcula o tempo do Quick
-                tempoclick = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+                tempoclick = (double)(fim - ini) / CLOCKS_PER_SEC;
                 printf("O tempo do quick foi: %lf ms\n", tempoclick);
             }
         }
@@ -213,7 +213,7 @@ int main() {
             insert(tamanho, Vaux);
             fim = clock();
             //calcula o tempo do insert
-            tempoinsert = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+            tempoinsert = (double)(fim - ini)  / CLOCKS_PER_SEC;
             printf("O tempo de insert foi: %lf ms\n", tempoinsert);
         }
     }
@@ -239,11 +239,11 @@ int main() {
             selection(tamanho, Vaux, 0);
             fim = clock();
             //calcula o tempo do selection
-            temposelection = (double)(fim - ini) * 1000 / CLOCKS_PER_SEC;
+            temposelection = (double)(fim - ini)  / CLOCKS_PER_SEC;
             printf("O tempo de selection foi: %lf ms\n", temposelection);
             }
         }
-        printf("Quer alterar o tamanho? (1)Sim (2)Nao");
+        printf("Quer alterar o tamanho? (1)Sim (2)Nao (Altera o Vetor Tambem)");
         scanf("%d",&opcaoT);
         if(opcaoT == 1){
             printf("Digite o novo tamanho do Vetor:");
