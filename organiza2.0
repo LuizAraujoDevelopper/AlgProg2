@@ -142,7 +142,7 @@ int main() {
 
     int V[tamanho];
     int Vaux[tamanho];
-    printf("O Programa ira imprimir o vetor  ou mostra o tempo conforme voce digita:(1)merge,(2)click,(3)insert e (4)selection SE voce Digitar (5) a operacao para:\n");
+    printf("Deseja usar qual Método:(1)merge,(2)click,(3)insert e (4)selection:");
     scanf("%d", &entrada);
     
     preencher(V,tamanho);
@@ -151,7 +151,7 @@ int main() {
     while(entrada != 5){
         
         if (entrada == 1) {
-    	printf("Quer imprimir o Vetor com o merge(1) ou ver o tempo de execucao?");
+    	printf("Digite (1) para imprimir o Vetor com o Merge ou (2) para ver o tempo de execucao:");
         scanf("%d", &opcaod);
     	if(opcaod == 1){
             /*MERGE SORT*/
@@ -173,7 +173,7 @@ int main() {
             }
         }
     else if(entrada == 2) {
-            printf("Quer imprimir o Vetor com o quick(1) ou ver o tempo de execucao?");
+            printf("Digite (1) para imprimir o Vetor com o Quick ou (2) para ver o tempo de execucao:");
             scanf("%d", &opcaod);
             if(opcaod == 1){
                 /*MERGE SORT*/
@@ -196,7 +196,7 @@ int main() {
             }
         }
     else if (entrada == 3){
-            printf("Quer imprimir o Vetor com o insert(1) ou ver o tempo de execucao?");
+            printf("Digite (1) para imprimir o Vetor com o Insert ou (2) para ver o tempo de execucao:");
             scanf("%d", &opcaod);
             if(opcaod == 1){
                     /*INSERT SORT*/
@@ -218,7 +218,7 @@ int main() {
         }
     }
     else if (entrada == 4){
-    	printf("Quer imprimir o Vetor com o Select(1) ou ver o tempo de execucao?");
+    	printf("Quer Digite (1) para imprimir o Vetor com o Select ou (2) para ver o tempo de execucao:");
         scanf("%d", &opcaod);
     	if(opcaod == 1){
             printf("SELECTION SORT\n");
@@ -243,10 +243,10 @@ int main() {
             printf("O tempo de selection foi: %lf ms\n", temposelection);
             }
         }
-        printf("Quer alterar o tamanho?:(1)sim (2)nao:");
+        printf("Quer alterar o tamanho? (1)Sim (2)Nao");
         scanf("%d",&opcaoT);
         if(opcaoT == 1){
-            printf("Digite o novo tamanho:");
+            printf("Digite o novo tamanho do Vetor:");
             scanf("%d", &tamanho);
             preencher(V,tamanho);
         }
