@@ -1,0 +1,145 @@
+/******************************************************************************
+
+                            Online C Compiler.
+                Code, Compile, Run and Debug C program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+typedef struct no{
+    int valor;
+    struct no *prox;
+}No;
+///////
+///////
+/////////Inserir No Inicio
+///////
+///////
+///////
+void insertI(No **lista,int Num){
+    srand(time(NULL));
+    No *novo = malloc(sizeof(No));
+    if (novo) {
+        novo->valor = Num ;
+        novo->prox = *lista;
+        *lista = novo;
+    } else
+        {
+            printf("Erro ao Alocar Memoria!");
+        }
+}
+///////
+///////
+/////////Inserir No Final
+///////
+///////
+///////
+
+void insertF(No **lista, int Num){
+     No *novo, *aux = malloc(sizeof(No));
+    if (novo) {
+        novo->valor = Num;
+        novo->prox = NULL;
+        if (*lista == NULL){
+            *lista = novo;
+        }else{
+            aux = *lista;
+            while(aux->prox){
+                aux = aux->prox;
+                aux->prox = novo;
+            }
+        }
+        
+    }else{
+        printf("Erro ao Alocar Memoria");
+    }
+}
+///////
+///////
+/////////Inserir No DEpois do Anterior
+///////
+///////
+///////
+void InserirM(No **lista, int Num, int ant){
+    No *novo, *aux= malloc(sizeof(No));
+    if (novo){ 
+        if(*lista == NULL){
+                novo->prox = NULL;
+                *lista = novo;
+            }
+        else{
+                aux = *lista;
+                while(aux->valor != ant && aux->prox )
+                    aux = aux->prox;
+                novo->prox = aux->prox; 
+                aux->prox = novo;
+            }
+        
+    }else{
+        printf("Erro ao alocar Memoria");
+    }
+}
+///////
+///////
+///////
+///////
+///////
+///////
+void imprimir(No *Lista){
+    printf("\n\t Lista:");
+    while(Lista){
+        printf("%d ", Lista->valor);
+    Lista = Lista->prox;
+    }
+    printf("\n\n");
+    
+}
+
+
+int main()
+{   int opcao, valor , anterio;
+    No *Li = malloc(sizeof(No));
+    if(Li){
+        do{
+        printf("\n\t0 - Sair\n\t1 - insertI\n\t2 - insert\n\t3 - InserirM \n\t4 - Imprimir\n");
+        scanf("%d", &opcao);
+        switch(opcao){
+            case 1:
+                printf("Digite um Valor:");
+                scanf("%d", &valor);
+                insertI(&Li, valor);
+                break;
+            case 2:
+                printf("Digite um Valor:");
+                scanf("%d", &valor);
+                insertF(&Li, valor);
+                break;
+                
+            case 3:
+                printf("Digite um Valor:");
+                scanf("%d %d", &valor, &anterio);
+                InserirM(&Li,valor,anterio);
+                break;
+            case 4:
+                imprimir(Li);
+                break;
+            default:
+                if (opcao != 0)
+                    printf("Opcao invalida");
+            
+        }
+        
+    }while(opcao != 0);
+        
+        
+    
+    }else{
+        printf("Not possible!");
+    }
+
+
+    return 0;
+}
