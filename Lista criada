@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+typedef struct no
+{
+  int valor;
+  int *p;  
+} No;
+
+void adicionarE(int *l, int val){
+    No novo;
+    int *aux;
+    novo->valor = val;
+    novo->p = NULL;
+    if(l == NULL){
+        l = novo;
+    } else{
+        aux = &l;
+        while(aux->p != NULL)
+            aux = aux->p;
+    }
+    aux = novo;
+}
+void imprimir(int *lista){
+    printf("Lista: ");
+    while(lista->p != NULL){
+        printf("%d",lista->valor);
+        lista = lista->p;
+    }
+}
+
+
+int main(){
+    int v;
+    No Lista = malloc(sizeof(No));
+    if (Lista){
+        do{printf("\n\t 1 - Adicionar\n\t2 - imprimir");
+            switch{
+                case 1:
+                    printf("Digite o valor a ser adicionado:"); 
+                    scanf("%d",&v);
+                    adicionarE(&Lista,v);
+                    break;
+                case 2:
+                    imprimir(Lista);
+                }
+        }while(v != 0);
+    }
+    else{
+        printf("Erro ao alocar Memoria");
+    }
+
+    
+    
+    
+    return 0 ;
+}
+
+    
