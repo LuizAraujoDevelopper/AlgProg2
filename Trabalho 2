@@ -1,0 +1,173 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Livro {
+    int id;
+    char titulo[100];
+    char autor[50];
+    int anoPublicacao;
+    int qtdade;
+    int qtdisponivel;
+    struct Livro *prox;
+} Livro;
+
+typedef struct Exemplar {
+    int id;
+    char titulo[100];
+    char autor[50];
+    int RGA;
+    struct Exemplar *prox;
+} Exemplar;
+
+void busca_insere(int ident, char* title, char* author, int ano, int quantidade, Livro **lst) {
+    Livro *p, *q, *nova;
+
+    nova = (Livro *) malloc(sizeof (Livro));
+    if (!nova) {
+        exit(EXIT_FAILURE);
+    }
+
+    nova->id = ident;
+    strncpy(nova->titulo, title, sizeof(nova->titulo));
+    strncpy(nova->autor, author, sizeof(nova->autor));
+    nova->anoPublicacao = ano;
+    nova->qtdade = quantidade;
+    nova->qtdisponivel = quantidade;
+    nova->prox = NULL;
+
+    if (*lst == NULL) {
+        *lst = nova;
+    } else {
+        p = *lst;
+        q = p->prox;
+
+        while (q != NULL && q->id != ident) {
+            p = q;
+            q = q->prox;
+        }
+
+        if (q != NULL && q->id == ident) {
+            q->qtdade++;
+            q->qtdisponivel++;
+            free(nova);  // Já que é uma duplicata, liberamos o novo nó.
+        } else {
+            nova->prox = NULL;
+            p->prox = nova;
+        }
+    }
+}
+
+
+void emprestarLivros(Livro** livrosahemprestar, Exemplar** emprestar, char tit[], int rga) {
+    Livro* aux = *livrosahemprestar;
+    Exemplar* aux1 = *emprestar;
+
+    if (aux == NULL) {
+        printf("Falha emprestarLivros\n");
+        exit(EXIT_FAILURE);
+    }
+
+    while (aux && strcmp(aux->titulo, tit) != 0) {
+        aux = aux->prox;
+    }
+
+    if (aux && aux->qtdisponivel > 0) {
+        aux->qtdisponivel--;
+
+        while (aux1 && aux1->prox != NULL) {
+            aux1 = aux1->prox;
+        }
+
+        aux1 = (Exemplar*)malloc(sizeof(Exemplar));
+        if (!aux1) {
+            exit(EXIT_FAILURE);
+        }
+
+        strcpy(aux1->titulo, aux->titulo);
+        aux1->id = aux->id;
+        strcpy(aux1->autor, aux->autor);
+        aux1->RGA = rga;
+        aux1->prox = NULL;
+    } else {
+        printf("Quantidade de Livros inexistentes ou indisponível\n");
+    }
+}
+
+void registrarDevolucao(Livro** livro, Exemplar** emprest, int rga) {
+    Livro* auxL;
+    Exemplar* auxE = *emprest;
+    Exemplar* anterior = NULL;
+    Exemplar* lixo;
+
+    while (auxE && auxE->RGA != rga) {
+        anterior = auxE;
+        auxE = auxE->prox;
+    }
+
+    if (auxE) {
+        auxL = *livro;
+        while (auxL && auxL->id != auxE->id) {
+            auxL = auxL->prox;
+        }
+
+        if (auxL) {
+            auxL->qtdisponivel++;
+        }
+
+        if (anterior) {
+            anterior->prox = auxE->prox;
+        } else {
+            *emprest = auxE->prox;
+        }
+
+        free(auxE);
+    } else {
+        printf("Exemplar não encontrado na lista de emprestados\n");
+    }
+}
+
+void imprimir_livro(Livro *lst) {
+    Livro* p;
+    for (p = lst; p != NULL; p = p->prox)
+        printf("ID: %d | \"%s\" | \"%s\" | %d | Disponíveis: %d\n", p->id, p->titulo, p->autor, p->anoPublicacao, p->qtdisponivel);
+}
+
+
+int main(void) {
+    Livro *Livros;
+    Livros = (Livro *) malloc(sizeof (Livro));
+    Livros->prox = NULL;
+
+    char comand;
+    char titul[100];
+    int RGA, ID;
+
+    while (1) {
+        scanf(" %c", &comand);  // Espaço antes do %c para ignorar espaços em branco
+
+        switch (comand) {
+            case 'A':
+                scanf("%d \"%99[^\"]\" \"%49[^\"]\" %d %d", &ID, Livros->titulo, Livros->autor, &Livros->anoPublicacao, &Livros->qtdade);
+                busca_insere(ID, Livros->titulo, Livros->autor, Livros->anoPublicacao, Livros->qtdade, &Livros);
+                break;
+
+            case 'E':
+                scanf("%d %d \"%99[^\"]\"", &ID, &RGA, titul);
+                emprestarLivros(&Livros, &Emprestimo, titul, RGA);
+                break;
+
+            case 'R':
+                scanf("%d", &RGA);
+                registrarDevolucao(&Livros, &Emprestimo, RGA);
+                break;
+
+            case 'P':
+                imprimir_livro(Livros->prox);
+                break;
+
+            case 'S':
+                return 0;
+        }
+    }
+}
