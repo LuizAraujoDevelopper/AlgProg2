@@ -59,41 +59,49 @@ void busca_insere(int ident, char* title, char* author, int ano, int quantidade,
 }
 
 
-void emprestarLivros(Livro** livrosahemprestar, Exemplar** emprestar, char tit[], int rga) {
-    Livro* aux = *livrosahemprestar;
-    Exemplar* aux1 = *emprestar;
 
-    if (aux == NULL) {
+void emprestarLivros(Livro** livrosahemprestar, Exemplar** emprestar, int ID, int rga) {
+    Livro* auxLivro = *livrosahemprestar;
+    Exemplar* auxExemplar = *emprestar;
+
+    if (auxLivro == NULL) {
         printf("Falha emprestarLivros\n");
         exit(EXIT_FAILURE);
     }
 
-    while (aux && strcmp(aux->titulo, tit) != 0) {
-        aux = aux->prox;
+    // Encontrar o livro correspondente
+    while (auxLivro && auxLivro->id != ID) {
+        auxLivro = auxLivro->prox;
     }
 
-    if (aux && aux->qtdisponivel > 0) {
-        aux->qtdisponivel--;
+    if (auxLivro && auxLivro->qtdisponivel > 0) {
+        auxLivro->qtdisponivel--;
 
-        while (aux1 && aux1->prox != NULL) {
-            aux1 = aux1->prox;
+        // Procurar um exemplar disponível do livro
+        while (auxExemplar && (auxExemplar->id != ID || auxExemplar->RGA != 0)) {
+            auxExemplar = auxExemplar->prox;
         }
 
-        aux1 = (Exemplar*)malloc(sizeof(Exemplar));
-        if (!aux1) {
-            exit(EXIT_FAILURE);
-        }
+        if (auxExemplar) {
+            auxExemplar->RGA = rga;
+        } else {
+            // Adicionar um novo exemplar, pois nenhum exemplar disponível foi encontrado
+            Exemplar* novoExemplar = (Exemplar*)malloc(sizeof(Exemplar));
+            if (!novoExemplar) {
+                exit(EXIT_FAILURE);
+            }
 
-        strcpy(aux1->titulo, aux->titulo);
-        aux1->id = aux->id;
-        strcpy(aux1->autor, aux->autor);
-        aux1->RGA = rga;
-        aux1->prox = NULL;
+            novoExemplar->id = ID;
+            strcpy(novoExemplar->titulo, auxLivro->titulo);
+            strcpy(novoExemplar->autor, auxLivro->autor);
+            novoExemplar->RGA = rga;
+            novoExemplar->prox = *emprestar;
+            *emprestar = novoExemplar;
+        }
     } else {
         printf("Quantidade de Livros inexistentes ou indisponível\n");
     }
 }
-
 void registrarDevolucao(Livro** livro, Exemplar** emprest, int rga) {
     Livro* auxL;
     Exemplar* auxE = *emprest;
@@ -130,7 +138,12 @@ void registrarDevolucao(Livro** livro, Exemplar** emprest, int rga) {
 void imprimir_livro(Livro *lst) {
     Livro* p;
     for (p = lst; p != NULL; p = p->prox)
-        printf("ID: %d | \"%s\" | \"%s\" | %d | Disponíveis: %d\n", p->id, p->titulo, p->autor, p->anoPublicacao, p->qtdisponivel);
+        printf("ID: %d | \"%s\" | \"%s\" | %d | Disponíveis: %d | Quantidade Total: %d\n", p->id, p->titulo, p->autor, p->anoPublicacao, p->qtdisponivel, p->qtdade);
+}
+void imprimir_exemplar(Exemplar *lst) {
+    Exemplar* p;
+    for (p = lst; p->prox != NULL; p = p->prox)
+        printf("ID: %d | \"%s\" | \"%s\" | RGA: %d\n", p->id, p->titulo, p->autor, p->RGA);
 }
 
 
@@ -139,6 +152,9 @@ int main(void) {
     Livros = (Livro *) malloc(sizeof (Livro));
     Livros->prox = NULL;
 
+    Exemplar *Emprestimo;
+    Emprestimo = (Exemplar *) malloc(sizeof (Exemplar));
+    Emprestimo->prox = NULL;
     char comand;
     char titul[100];
     int RGA, ID;
@@ -153,8 +169,8 @@ int main(void) {
                 break;
 
             case 'E':
-                scanf("%d %d \"%99[^\"]\"", &ID, &RGA, titul);
-                emprestarLivros(&Livros, &Emprestimo, titul, RGA);
+                scanf("%d %d", &ID, &RGA);
+                emprestarLivros(&Livros, &Emprestimo,ID, RGA);
                 break;
 
             case 'R':
@@ -165,7 +181,9 @@ int main(void) {
             case 'P':
                 imprimir_livro(Livros->prox);
                 break;
-
+            case 'I':
+                imprimir_exemplar(Emprestimo);
+                break;
             case 'S':
                 return 0;
         }
