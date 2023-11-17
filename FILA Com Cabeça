@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct lista {
+    int Valor;
+    struct lista *prox;
+} Lista;
+
+void inicializarFilaComCabeca(Lista **cabeca) {
+    *cabeca = (Lista *)malloc(sizeof(Lista));
+    (*cabeca)->prox = NULL;
+}
+
+void AdicionarNaFila(Lista *cabeca, int valor) {
+    Lista *Novo = (Lista *)malloc(sizeof(Lista));
+
+    if (Novo) {
+        Novo->Valor = valor;
+        Novo->prox = NULL;
+
+        Lista *aux = cabeca;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
+        }
+
+        aux->prox = Novo;
+    } else {
+        printf("Erro na alocação de memória!\n");
+    }
+}
+
+int desenfileirarFila(Lista *cabeca) {
+    if (cabeca->prox == NULL) {
+        printf("Fila vazia!\n");
+        return -1;
+    }
+
+    int valor;
+    Lista *temp = cabeca->prox;
+    cabeca->prox = temp->prox;
+    valor = temp->Valor;
+    free(temp);
+    return valor;
+}
+
+void imprimirElementos(Lista *cabeca) {
+    if (cabeca->prox == NULL) {
+        printf("Fila vazia!\n");
+        return;
+    }
+
+    Lista *aux = cabeca->prox;
+    printf("\nLista: ");
+    while (aux) {
+        printf(" %d", aux->Valor);
+        aux = aux->prox;
+    }
+    printf("\n");
+}
+
+void liberarFila(Lista *cabeca) {
+    while (cabeca != NULL) {
+        Lista *temp = cabeca;
+        cabeca = cabeca->prox;
+        free(temp);
+    }
+}
+
+int main() {
+    Lista *cabeca = NULL;
+    inicializarFilaComCabeca(&cabeca);
+    int opcao, Element;
+
+    do {
+        printf("\n\t0 - Sair\n\t1 - Adiciona Elemento Na FILA\n\t2 - Desenfileirar\n\t3- Imprime Os Elementos\n\n");
+        scanf("%d", &opcao);
+        switch (opcao) {
+            case 1:
+                scanf("%d", &Element);
+                AdicionarNaFila(cabeca, Element);
+                break;
+            case 2:
+                printf("Saiu da Lista: %d\n", desenfileirarFila(cabeca));
+                break;
+            case 3:
+                imprimirElementos(cabeca);
+                break;
+            default:
+                break;
+        }
+    } while (opcao != 0);
+
+    
+    liberarFila(cabeca);
+
+    return 0;
+}
