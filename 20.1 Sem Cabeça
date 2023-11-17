@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct lista {
+    int Valor;
+    struct lista *prox;
+} Lista;
+
+void AdicionarNaFila(Lista **L, int valor) {
+    Lista *Novo = (Lista *)malloc(sizeof(Lista));
+    
+    
+    if (Novo) {
+        Novo->Valor = valor;
+        Novo->prox = NULL;
+        if(*L == NULL){
+            *L = Novo;
+        }
+        else{
+            Lista *aux = *L;
+            while(aux->prox!=NULL){
+                aux = aux->prox;
+                
+            }
+            aux->prox = Novo;
+        }
+    } else {
+        printf("Erro Novo!\n");
+    }
+  
+}
+
+
+int desenfileirarFila(Lista **L) {
+    if (*L == NULL) {
+        printf("Fila vazia!\n");
+        return -1; // ou outro valor indicando erro/vazio
+    }
+
+    int valor;
+    Lista *temp = *L;
+    *L = temp->prox;
+    valor = temp->Valor;
+    free(temp);
+    return valor;
+}
+
+void imprimirElementos(Lista **L) {
+    if (*L == NULL) {
+        printf("Fila vazia!\n");
+        return;
+    }
+
+    Lista *aux = *L;
+    printf("\nLista: ");
+    while (aux) {
+        printf(" %d", aux->Valor);
+        aux = aux->prox;
+    }
+    printf("\n");
+}
+
+int main() {
+    Lista *FILA = NULL;
+    int opcao, Element;
+
+    do {
+        printf("\n\t0 - Sair\n\t1 - Adiciona Elemento Na FILA\n\t2 - Desenfileirar\n\t3- Imprime Os Elementos\n\n");
+        scanf("%d", &opcao);
+        switch (opcao) {
+            case 1:
+                scanf("%d", &Element);
+                AdicionarNaFila(&FILA, Element);
+                break;
+            case 2:
+                printf("Saiu da Fila: %d\n", desenfileirarFila(&FILA));
+                break;
+            case 3:
+                imprimirElementos(&FILA);
+                break;
+            default:
+                break;
+        }
+    } while (opcao != 0);
+
+    // Limpar a memória antes de sair
+    while (FILA != NULL) {
+        desenfileirarFila(&FILA);
+    }
+
+    return 0;
+}
