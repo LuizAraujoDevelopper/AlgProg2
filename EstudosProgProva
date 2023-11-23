@@ -1,0 +1,60 @@
+a) void CriaLista(struct lista **p)
+b) liberaLista(struct lista *p)
+c) imprimeLista(struct lista *p)
+d) insereLista( struct lista *p, int x)
+
+a)
+void CriaLista(struct lista **p){
+  struct lista *n;
+  n = (struct *) malloc(sizeof(struct lista));
+  n->prox = NULL;
+  *p = n;
+}
+
+
+b)
+void liberar(struct lista *p){
+  struct lista * q = p->prox;
+  while(q != NULL){
+    p->prox = q->prox;
+    free(q);
+    q = p->prox;
+  }
+}
+
+c)
+void imprimeLista( struct lista *p){
+  struct lista *q;
+  for(q = p->prox ; q != NULL ; q = q->prox)
+    printf("%d\n",q->chave);
+}
+
+d)
+void insereLista(struct * p, int x){
+  struct lista *q, *r = NULL;
+  for(q = p ; q->prox != NULL ; q = q->prox)
+
+  r = (struct lista*) malloc(sizeof(struct lista));
+  r->chave = x;
+  r->prox = NULL;
+  q->prox = r; 
+}
+
+int main(void){
+struct lista * L1, *L2, *L3;
+int n,m,x;
+CriarLista(&L1);
+CriarLista(&L2);
+CriarLista(&L3);
+scanf("%d %d",&m,&n);
+for(i = 0 ; i < m ; i++){
+  scanf("%d",&x);
+  insereLista(L1,x);
+}
+for(i = 0 ; i < n ; i++){
+  scanf("%d",&x);
+  insereLista(L2,x);
+
+return 0;
+}
+
