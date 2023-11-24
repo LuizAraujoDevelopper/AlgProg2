@@ -1,4 +1,4 @@
-a) void CriaLista(struct lista **p)
+/*a) void CriaLista(struct lista **p)
 b) liberaLista(struct lista *p)
 c) imprimeLista(struct lista *p)
 d) insereLista( struct lista *p, int x)
@@ -50,9 +50,129 @@ scanf("%d %d",&m,&n);
 for(i = 0 ; i < m ; i++){
   scanf("%d",&x);
   insereLista(L1,x);
+}*/
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct lista {
+    int chave;
+    struct lista *prox;
+} Lista;
+
+typedef struct cabeca {
+    Lista *lista;
+} Cabeca;
+
+void CriarLista(Cabeca *p) {
+    Lista *n;
+    n = (Lista *)malloc(sizeof(Lista));
+    n->prox = NULL;
+    p->lista = n;
 }
-for(i = 0 ; i < n ; i++){
-  scanf("%d",&x);
+
+void Liberar(Cabeca *p) {
+    Lista *q = (p)->lista;
+    while (q != NULL) {
+        p->lista = q->prox;
+        free(q);
+        q = p->lista;
+    }
+}
+
+void InsereLista(Cabeca *p, int x) {
+    Lista *q = p->lista;
+    while (q->prox != NULL) {
+        q = q->prox;
+    }
+
+    Lista *r = (Lista *)malloc(sizeof(Lista));
+    r->chave = x;
+    r->prox = NULL;
+    q->prox = r;
+}
+
+void ImprimeLista(Cabeca *p) {
+    Lista *q;
+    for (q = p->lista->prox; q != NULL; q = q->prox)
+        printf("%d ", q->chave);
+    printf("\n");
+}
+
+void JuntarListasOrdenadas(Cabeca *L1, Cabeca *L2, Cabeca *L3) {
+    Lista *p = L1->lista->prox;
+    Lista *q = L2->lista->prox;
+
+    CriarLista(L3);  // Inicializar a lista L3
+
+    while (p != NULL && q != NULL) {
+        if (p->chave < q->chave) {
+            InsereLista(L3, p->chave);
+            p = p->prox;
+        } else {
+            InsereLista(L3, q->chave);
+            q = q->prox;
+        }
+    }
+
+    // Adiciona os elementos restantes de L1 (se houver)
+    while (p != NULL) {
+        InsereLista(L3, p->chave);
+        p = p->prox;
+    }
+
+    // Adiciona os elementos restantes de L2 (se houver)
+    while (q != NULL) {
+        InsereLista(L3, q->chave);
+        q = q->prox;
+    }
+}
+
+int main(void) {
+    Cabeca *L1, *L2, *L3;
+    int n, m, x;
+    Lista *q,*p;
+
+    L1 = (Cabeca *)malloc(sizeof(Cabeca));
+    L2 = (Cabeca *)malloc(sizeof(Cabeca));
+    L3 = (Cabeca *)malloc(sizeof(Cabeca));
+
+    CriarLista(L1);
+    CriarLista(L2);
+    CriarLista(L3);
+
+    printf("Digite o tamanho das listas:\n");
+    scanf("%d %d", &m, &n);
+
+    printf("Preencha a Lista 1 tamanho %d\n", m);
+    for (int i = 0; i < m; i++) {
+        scanf("%d", &x);
+        InsereLista(L1, x);
+    }
+
+    printf("Preencha a Lista 2 tamanho %d\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &x);
+        InsereLista(L2, x);
+    }
+
+    ImprimeLista(L1);
+    ImprimeLista(L2);
+    
+    JuntarListasOrdenadas(L1,L2,L3);
+    ImprimeLista(L3);
+    
+    
+
+    Liberar(L1);
+    Liberar(L2);
+    
+
+    free(L1);
+    free(L2);
+
+    return 0;
+}
+
   insereLista(L2,x);
 
 return 0;
