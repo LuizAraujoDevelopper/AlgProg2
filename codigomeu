@@ -1,0 +1,39 @@
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    FILE *arq1, *arq2;
+    arq1 = fopen("Arquivo1.txt", "r");
+    arq2 = fopen("Arquivo2.txt", "r");
+    FILE *arq3;
+    arq3 = fopen("Arquivo3.txt", "a");
+    if (arq1 == NULL || arq2 == NULL)
+    {
+        printf("Erro na abertura do arquivo de saida\n");
+        return 1;
+        fclose(arq1);
+        fclose(arq2);
+    }
+    else
+    {
+        printf("Sucesso em abrir arquivo");
+        char c1[100], c2[100];
+        fscanf(arq1, "%c", &c1);
+        fscanf(arq2, "%c", &c2);
+        while (feof(arq1) == 0 && feof(arq2) == 0)
+        {
+
+            if (strcmp(c1, c2) < 0)
+            {
+                fprintf(arq3, "%c", &c1);
+            }
+            else
+            {
+                fprintf(arq3, "%c", &c2);
+            }
+        }
+    }
+    return 0;
+}
