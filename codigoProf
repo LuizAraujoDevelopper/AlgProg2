@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<string.h>
+#define TAM 20
+
+int main()
+{
+	FILE *arq1, *arq2, *arqsaida;
+	char nome1[TAM+1], nome2[TAM+1];
+
+	// abrindo dois arquivos
+	arq1 = fopen("arquivo1.txt", "r");
+	arq2 = fopen("arquivo2.txt", "r");
+
+	if(arq1 == NULL || arq2 == NULL)
+		printf("Arquivo 1 ou 2 nao pode ser aberto\n");
+	else{
+		arqsaida = fopen("saida.txt", "a");
+		if(arqsaida == NULL)
+			printf("Arquivo saida nao pode ser aberto\n");
+		else{
+			fscanf(arq1, " %s", nome1);
+			fscanf(arq2, " %s", nome2);
+			while( feof(arq1) == 0 && feof(arq2) == 0 )
+			{
+				if(strcmp(nome1, nome2) < 0){
+					fprintf(arqsaida, "%s\n", nome1);
+					fscanf(arq1, " %s", nome1);
+				}
+				else{
+					fprintf(arqsaida, "%s\n", nome2);
+					fscanf(arq2, " %s", nome2);
+				}
+			}
+			// acabando de copiar arquivo1
+			while(feof(arq1) == 0)
+			{
+				fprintf(arqsaida, "%s\n", nome1);
+				fscanf(arq1, " %s", nome1);	
+			}
+			// acabando de copiar arquivo2
+			while(feof(arq2) == 0)
+			{
+				fprintf(arqsaida, "%s\n", nome2);
+				fscanf(arq2, " %s", nome2);	
+			}
+		}
+		fclose(arq1);
+		fclose(arq2);
+	}
+
+	return 0;
+}
+
+
+===========
+Antônio
+Berenice
+Diana
+Solange
+Sônia
+Zuleica
+============
+Carlos
+Célia
+Fábio
+Henrique
